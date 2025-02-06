@@ -6,6 +6,7 @@ import { FetchResult } from './api/types'
 
 import SearchBar from './components/SearchBar'
 import MoviesContainer from './components/MoviesList';
+import Spinner from './components/Spinner'
 
 
 
@@ -13,6 +14,7 @@ function App() {
   const [movies, setMovies] = useState<FetchResult>();
   const [searchText, setSearchText] = useState('');
   const [genres, setGenres] = useState<Record<string, number>>({})
+  const [loading, setLoading] = useState<boolean>(false);
 
   const loadPopularMovies = useFetchPopular();
   const loadGenres = useFetchGenres();
@@ -20,10 +22,12 @@ function App() {
 
 
   useEffect(() => {
+    setLoading(true)
     fetchMovies()
   }, [])
 
   useEffect(() => {
+    setLoading(true)
     if (searchText === '') {
       fetchMovies();
     } else {
@@ -31,15 +35,15 @@ function App() {
     }
   }, [searchText])
 
-  function fetchMovies() {
-    loadPopularMovies().then(setMovies)
-    loadGenres().then(setGenres)
+  async function fetchMovies() {
+    await loadPopularMovies().then(setMovies)
+    await loadGenres().then(setGenres)
+    setLoading(false)
   }
 
   async function searchMovies() {
-    const movies = await loadSearchMovies(searchText, genres);
-
-    setMovies(movies)
+    await loadSearchMovies(searchText, genres).then(setMovies);
+    setLoading(false)
   }
 
   const genresText = Object.keys(genres).join(", ")
@@ -49,6 +53,7 @@ function App() {
       <SearchBar setText={setSearchText} />
       <p>Genres: {genresText}</p>
       {movies && <MoviesContainer movies={movies} />}
+      {loading && <Spinner />}
     </>
   )
 }
