@@ -16,10 +16,14 @@
 .movie-card {
   flex: 1 1 calc(25% - 16px);
   max-width: calc(25% - 16px);
-  /* background-color: #f0f0f0; */
   padding: 20px;
   text-align: center;
   border-radius: 8px;
+}
+
+.movie-card:hover {
+  cursor: pointer;
+  background-color: #f0f0f0;
 }
 
 @media (max-width: 768px) {

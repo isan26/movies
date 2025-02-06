@@ -27,11 +27,33 @@ export function useFetchUpcoming() {
     return () => callRequest<FetchResult>(request)
 }
 
-export function useSearchMovie() {
-    const url = `${BASE_URL}/discover/movie?api_key=${API_KEY}`;
-    const request = reqmate.get(url);
 
-    return () => callRequest<FetchResult>(request)
+export function useSearchMovie() {
+    return (searchText: string, genres: Record<string, number>) => {
+        let url = ``;
+        const genreFromSearch = getGenreFromSearch(searchText, genres);
+        if (genreFromSearch) {
+            url += `${BASE_URL}/discover/movie?api_key=${API_KEY}&with_genres=${genreFromSearch}`
+        } else {
+            url = `${BASE_URL}/search/movie?api_key=${API_KEY}&query=${searchText}`
+        }
+
+        const request = reqmate.get(url);
+
+        return callRequest<FetchResult>(request)
+    }
+}
+
+function getGenreFromSearch(searchText: string, genres: Record<string, number>) {
+    const lowercaseSearch = searchText.toLowerCase();
+
+    for (const key in genres) {
+        if (key.toLocaleLowerCase() === lowercaseSearch) {
+            return genres[key]
+        }
+    }
+
+    return false;
 }
 
 export function useFetchGenres() {
