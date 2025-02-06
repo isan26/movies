@@ -11,9 +11,13 @@ export default function MovieCard
                 <img src={`${BASE_IMAGE_URL}/${movie.poster_path}`} />
             </figure>
             <aside>
-                <header>{movie.title}</header>
-                {movie.overview}
-                <footer>{movie.release_date}</footer>
+                <header>{movie.title} - {Math.round(movie.vote_average)}/10</header>
+                {/* {movie.overview} */}
+                <footer>
+                    <button>
+                        More info
+                    </button>
+                </footer>
             </aside>
         </article>
     )
