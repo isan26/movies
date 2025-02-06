@@ -48,9 +48,7 @@ function App() {
     <>
       <SearchBar setText={setSearchText} />
       <p>Genres: {genresText}</p>
-      <MoviesContainer>
-        {movies?.results.map(movie => <MoviesContainer.Movie key={movie.id} movie={movie} />)}
-      </MoviesContainer>
+      {movies && <MoviesContainer movies={movies} />}
     </>
   )
 }
