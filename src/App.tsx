@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import './App.css'
 
-import { useFetchPopular } from './api/api'
+import { useFetchPopular, useFetchGenres } from './api/api'
 import { type Movie } from './api/types'
 
 import MoviesContainer from './containers/MoviesContainer';
@@ -12,6 +12,7 @@ function App() {
   const [movies, setMovies] = useState<Movie[]>([]);
 
   const loadPopularMovies = useFetchPopular();
+  const loadGenres = useFetchGenres();
 
   useEffect(() => {
     fetchMovies()
@@ -19,6 +20,8 @@ function App() {
 
   async function fetchMovies() {
     const result = await loadPopularMovies();
+    const genres = await loadGenres();
+    console.log({ genres })
 
     setMovies(result.results);
   }
@@ -32,7 +35,7 @@ function App() {
           placeholder="Search"
           aria-label="Search"
         />
-        {movies.map(movie => <MovieCard movie={movie} />)}
+        {movies.map(movie => <MovieCard key={movie.id} movie={movie} />)}
       </MoviesContainer>
     </>
   )
